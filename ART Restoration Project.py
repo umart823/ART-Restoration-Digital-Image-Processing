@@ -351,16 +351,6 @@ class Ui_MainWindow(object):
         self.algorithmBtn3.setVisible(True)
         self.algorithmBtn3.setText(btn3Text)
 
-    def ApplyCenteredClicked(self):
-        global selectedOption
-        if(selectedOption=="colorize"):
-            self.outputImage.setText("Please wait\nLoading...")
-            QtCore.QCoreApplication.processEvents()
-            output_image = Algorithms.Colorize(input_image)
-            self.saveImage(output_image)
-            self.actionSave_Image.setEnabled(True)
-            self.applyBtnCentered.setVisible(False)
-
     def HistogramEqualizationClicked(self):
         if(input_image!=""):
             global selectedOption
@@ -372,8 +362,10 @@ class Ui_MainWindow(object):
             self.show3AlgorithmBtns("GHS Algorithm","BJEH Algorithm","FFSU Algorithm")
 
     def DeblurClicked(self):
+        global selectedOption
         if(input_image!=""):
-            self.show3AlgorithmBtns("GHS Algorithm","BJEH Algorithm","FFSU Algorithm")
+            selectedOption = "deblur"
+            self.show1AlgorithmBtn("Richardson-Lucy")
     
     def SharpenClicked(self):
         if(input_image!=""):
@@ -395,8 +387,8 @@ class Ui_MainWindow(object):
             self.show3AlgorithmBtns("GHS Algorithm","BJEH Algorithm","FFSU Algorithm")
 
     def DenoiseClicked(self):
+        global selectedOption
         if(input_image!=""):
-            global selectedOption
             selectedOption="denoise"
             self.show3AlgorithmBtns("FastNlMeans","Bm3D","Median Blur")
 
@@ -413,6 +405,9 @@ class Ui_MainWindow(object):
         if(selectedOption=="histogramEqualization"):
             selectedAlgorithm="CLAHE"
             self.showDialog({"slider1":{"label":"Clip Limit","default":40,"min":1,"max":100,"increment":1}})
+        if(selectedOption=="deblur"):
+            selectedAlgorithm="Richardson-Lucy"
+            self.showDialog({"slider1":{"label":"Iterations","default":10,"min":1,"max":100,"increment":1}, "slider2":{"label":"PSF Size","default":5,"min":1,"max":100,"increment":2}})
 
     def AlgorithmBtn2Clicked(self):
         global selectedAlgorithm
@@ -426,6 +421,16 @@ class Ui_MainWindow(object):
             selectedAlgorithm="MedianBlur"
             self.showDialog({"slider1":{"label":"K Size","default":5,"min":1,"max":11,"increment":2}})
 
+    def ApplyCenteredClicked(self):
+        global selectedOption
+        if(selectedOption=="colorize"):
+            self.outputImage.setText("Please wait\nLoading...")
+            QtCore.QCoreApplication.processEvents()
+            output_image = Algorithms.Colorize(input_image)
+        self.saveImage(output_image)
+        self.actionSave_Image.setEnabled(True)
+        self.applyBtnCentered.setVisible(False)
+        
     def handleApplyChanges(self, slider_values):
         global sliderValues
         sliderValues = slider_values
@@ -441,6 +446,9 @@ class Ui_MainWindow(object):
             self.saveImage(output_image)
         if(selectedAlgorithm=="MedianBlur"):
             output_image=Algorithms.MedianBlur_Denoising(input_image,sliderValues[0])
+            self.saveImage(output_image)
+        if(selectedAlgorithm=="Richardson-Lucy"):
+            output_image,psf = Algorithms.Richardson_lucy_blind_deconvolution_psf(input_image,sliderValues[0],(sliderValues[1],sliderValues[1]))
             self.saveImage(output_image)
         # if(selectedAlgorithm=="CLAHE"):
         #     output_image=Algorithms.CLAHE(input_image,sliderValues[0])

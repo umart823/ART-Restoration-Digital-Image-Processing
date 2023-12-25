@@ -3,6 +3,9 @@ import bm3d
 import numpy as np
 import cv2
 import os
+import numpy as np
+import cv2
+from scipy.signal import convolve2d
 
 def FastNlMeans_Denoising(imgPath,h,templateWindowSize,searchWindowSize):
     image = cv2.imread(imgPath)
@@ -60,3 +63,29 @@ def Colorize(imgPath):
     colorized = (255 * colorized).astype("uint8")
     return colorized
 
+def Richardson_lucy_blind_deconvolution_psf(imgPath, num_iterations=10, psf_size=(5, 5)):
+    image = cv2.imread(imgPath)
+    # Initialize the PSF and deblurred image
+    psf = np.ones(psf_size) / np.prod(psf_size)
+    deblurred_image = image.copy()
+
+    for _ in range(num_iterations):
+        # Estimate the blurred image using the current PSF
+        blurred_estimate = convolve2d(deblurred_image, psf, 'same', 'symm')
+
+        # Compute the error between the original image and the blurred estimate
+        error = image / (blurred_estimate + 1e-10)
+
+        # Update the deblurred image
+        deblurred_image *= convolve2d(error, psf[::-1, ::-1], 'same', 'symm')
+
+        # Update the PSF
+        psf_update = convolve2d(image / (convolve2d(deblurred_image, psf, 'same', 'symm') + 1e-10),
+                                deblurred_image[::-1, ::-1], 'full', 'symm')
+        psf_update = psf_update[:psf_size[0], :psf_size[1]]
+        psf += psf_update
+
+        # Normalize the PSF to ensure it sums to 1
+        psf /= np.sum(psf)
+
+    return deblurred_image, psf
