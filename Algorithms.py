@@ -74,4 +74,49 @@ def CLAHE(imgPath,clipLimit=5.0,GridSize=10):
 
 # def Richardson_Lucy(imgPath, iterations, kernel_size):
 
-    
+def Automated_Crack_Fixing(imgPath, minEdgeRange, maxEdgeRange, minDesiredLineLength,maxDesiredLineLength,maxLineGap, KernelSize,KernelSize2):
+    o_image=cv2.imraed(imgPath)
+    image = cv2.cvtColor(o_image, cv2.COLOR_BGR2GRAY)
+    image = image.astype("uint8")
+    edges = cv2.Canny(image, minEdgeRange, maxEdgeRange)
+
+    # Dilate the edges using a kernel (adjust the kernel size as needed)
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (KernelSize, KernelSize))
+    dilated_edges = cv2.dilate(edges, kernel)
+    # cv2_imshow(dilated_edges)
+
+    # Detect lines using HoughLinesP
+    lines = cv2.HoughLinesP(dilated_edges, 1, np.pi/180, threshold=50, minLineLength=minDesiredLineLength, maxLineGap=maxLineGap)
+
+    # Check if lines are detected
+
+    filtered_lines = []
+    if lines is not None:
+      for line in lines:
+          x1, y1, x2, y2 = line[0]
+          if np.linalg.norm(np.array([x1, y1]) - np.array([x2, y2])) < maxDesiredLineLength:
+              filtered_lines.append(line[0])
+        # Draw lines on the original image
+      output_image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+      mask = np.zeros_like(output_image)
+      for line in filtered_lines:
+        x1, y1, x2, y2 = line
+        cv2.line(output_image, (x1, y1), (x2, y2), (0, 0, 255), 2)
+        cv2.line(mask, (x1, y1), (x2, y2), 255, 2)
+
+      # cv2_imshow(output_image)
+
+      mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+      _, mask = cv2.threshold(mask, 1, 255, cv2.THRESH_BINARY)
+
+      kernel2 = cv2.getStructuringElement(cv2.MORPH_RECT, (KernelSize2, KernelSize2))
+      mask = cv2.dilate(mask, kernel2)
+      # cv2_imshow(mask)
+      inpainting_method = cv2.INPAINT_TELEA  # Use the correct flag
+      inpainted_image = cv2.inpaint(image, mask, inpainting_method, flags=cv2.INPAINT_TELEA)
+
+    #   cv2_imshow(inpainted_image)
+      return inpainted_image
+    else:
+        print("Sorry, No lines detected")
+

@@ -372,8 +372,10 @@ class Ui_MainWindow(object):
             self.show3AlgorithmBtns("GHS Algorithm","BJEH Algorithm","FFSU Algorithm")
     
     def FixCracksClicked(self):
+        global selectedOption
         if(input_image!=""):
-            self.show3AlgorithmBtns("GHS Algorithm","BJEH Algorithm","FFSU Algorithm")
+            selectedOption = "fixCracks"
+            self.show1AlgorithmBtn("Auto Fix Cracks")
 
     def ColorizeClicked(self):
         global selectedOption
@@ -408,6 +410,9 @@ class Ui_MainWindow(object):
         if(selectedOption=="deblur"):
             selectedAlgorithm="Richardson-Lucy"
             self.showDialog({"slider1":{"label":"Iterations","default":10,"min":1,"max":100,"increment":1}, "slider2":{"label":"PSF Size","default":5,"min":1,"max":100,"increment":2}})
+        if(selectedOption=="fixCracks"):
+            selectedAlgorithm="AutoFix"
+            self.showDialog({"slider1":{"label":"Min Edge Range","default":0,"min":0,"max":255,"increment":1}, "slider2":{"label":"Max Edge Range","default":255,"min":0,"max":255,"increment":1}, "slider3":{"label":"Min Desired Length","default":100,"min":0,"max":1000,"increment":10}, "slider4":{"label":"Max Desired Length","default":200,"min":0,"max":1000,"increment":10}, "slider5":{"label":"Max Line Gap","default":10,"min":0,"max":1000,"increment":1}, "slider6":{"label":"Kernel Size","default":5,"min":1,"max":1001,"increment":2}, "slider7":{"label":"Kernal Size 2","default":3,"min":1,"max":1001,"increment":2}})
 
     def AlgorithmBtn2Clicked(self):
         global selectedAlgorithm
@@ -448,12 +453,15 @@ class Ui_MainWindow(object):
             output_image=Algorithms.MedianBlur_Denoising(input_image,sliderValues[0])
             self.saveImage(output_image)
         # if(selectedAlgorithm=="Richardson-Lucy"):
-        #     output_image = Algorithms.Richardson_lucy_blind_deconvolution_psf(input_image,sliderValues[0],sliderValues[1])
-        #     self.saveImage(output_image)
+            # output_image = Algorithms.Richardson_lucy_blind_deconvolution_psf(input_image,sliderValues[0],sliderValues[1])
+            # self.saveImage(output_image)
         if(selectedAlgorithm=="CLAHE"):
             output_image=Algorithms.CLAHE(input_image,sliderValues[0])
             self.saveImage(output_image)
-
+        if(selectedAlgorithm=="CLAHE"):
+            output_image=Algorithms.CLAHE(input_image,sliderValues[0],sliderValues[1],sliderValues[2],sliderValues[3],sliderValues[4],sliderValues[5],sliderValues[6])
+            self.saveImage(output_image)
+        
     def showDialog(self, sliderInfo):
         dialog = QDialog()
         dialog_ui = Ui_Dialog(self)
