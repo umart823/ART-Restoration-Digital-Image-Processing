@@ -259,9 +259,10 @@ class Ui_MainWindow(object):
     def openImage(self):
         self.actionSave_Image.setEnabled(False)
         QtCore.QCoreApplication.processEvents()
+        self.delete_files_in_folder()
         options = QtWidgets.QFileDialog.Options()
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(
-            None, "Open Image", "", "Images (*.png *.xpm *.jpg *.bmp *.gif);;All Files (*)", options=options
+            None, "Open Image", "", "Images (*.png *.xpm *.jpg *.bmp *.gif *.jpeg *.webp *.tiff *.heic);;All Files (*)", options=options
         )
         if fileName:
             pixmap = QtGui.QPixmap(fileName)
@@ -475,6 +476,18 @@ class Ui_MainWindow(object):
             print(f"Image {name} not found.")
         except Exception as e:
             print(f"Error deleting image {name}: {e}")
+
+    def delete_files_in_folder(self,temp_folder_path="Temp"):
+        if not os.path.exists(temp_folder_path):
+            return
+
+        files_to_delete = [os.path.join(temp_folder_path, file) for file in os.listdir(temp_folder_path)]
+
+        for file_path in files_to_delete:
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                print(f"Error deleting {file_path}: {e}")
 
 
 if __name__ == "__main__":
