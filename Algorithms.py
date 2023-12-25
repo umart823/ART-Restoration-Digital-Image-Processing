@@ -63,7 +63,15 @@ def Colorize(imgPath):
     colorized = (255 * colorized).astype("uint8")
     return colorized
 
-# def CLAHE(imgPath,clipLimit,GridSize):
+def CLAHE(imgPath,clipLimit=5.0,GridSize=10):
+    image = cv2.imread(imgPath)
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    clahe = cv2.createCLAHE(clipLimit, tileGridSize=(GridSize, GridSize))
+    enhanced_image = clahe.apply(gray_image)
+    return enhanced_image
 
-# def Richardson_lucy_blind_deconvolution_psf(imgPath, num_iterations=10, psf_size=(5, 5)):
+# def Richardson_lucy_blind_deconvolution_psf(imgPath, num_iterations=10, psf_size=5):
+
+# def Richardson_Lucy(imgPath, iterations, kernel_size):
+
     

@@ -404,7 +404,7 @@ class Ui_MainWindow(object):
             self.showDialog({"slider1":{"label":"\'h\' Filter Strength","default":5,"min":5,"max":30,"increment":1},"slider2":{"label":"Template Win. Size","default":7,"min":1,"max":21,"increment":2},"slider3":{"label":"Search Win. Size","default":21,"min":21,"max":50,"increment":1}})
         if(selectedOption=="histogramEqualization"):
             selectedAlgorithm="CLAHE"
-            self.showDialog({"slider1":{"label":"Clip Limit","default":40,"min":1,"max":100,"increment":1}})
+            self.showDialog({"slider1":{"label":"Clip Limit","default":5,"min":1,"max":80,"increment":1}})
         if(selectedOption=="deblur"):
             selectedAlgorithm="Richardson-Lucy"
             self.showDialog({"slider1":{"label":"Iterations","default":10,"min":1,"max":100,"increment":1}, "slider2":{"label":"PSF Size","default":5,"min":1,"max":100,"increment":2}})
@@ -447,12 +447,12 @@ class Ui_MainWindow(object):
         if(selectedAlgorithm=="MedianBlur"):
             output_image=Algorithms.MedianBlur_Denoising(input_image,sliderValues[0])
             self.saveImage(output_image)
-        if(selectedAlgorithm=="Richardson-Lucy"):
-            output_image,psf = Algorithms.Richardson_lucy_blind_deconvolution_psf(input_image,sliderValues[0],(sliderValues[1],sliderValues[1]))
-            self.saveImage(output_image)
-        # if(selectedAlgorithm=="CLAHE"):
-        #     output_image=Algorithms.CLAHE(input_image,sliderValues[0])
+        # if(selectedAlgorithm=="Richardson-Lucy"):
+        #     output_image = Algorithms.Richardson_lucy_blind_deconvolution_psf(input_image,sliderValues[0],sliderValues[1])
         #     self.saveImage(output_image)
+        if(selectedAlgorithm=="CLAHE"):
+            output_image=Algorithms.CLAHE(input_image,sliderValues[0])
+            self.saveImage(output_image)
 
     def showDialog(self, sliderInfo):
         dialog = QDialog()
