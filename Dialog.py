@@ -19,6 +19,10 @@ class Ui_Dialog(object):
             x=315
         elif(sliders==4):
             x=420
+        elif(sliders==5):
+            x=520
+        elif(sliders==6):
+            x=620
         else:
             x=721
         Dialog.resize(x, y)
