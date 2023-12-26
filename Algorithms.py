@@ -70,12 +70,36 @@ def CLAHE(imgPath,clipLimit=5.0,GridSize=10):
     enhanced_image = clahe.apply(gray_image)
     return enhanced_image
 
-# def Richardson_lucy_blind_deconvolution_psf(imgPath, num_iterations=10, psf_size=5):
+def Richardson_lucy_blind_deconvolution_psf(imgPath, num_iterations=10, psf_size=(5, 5)):
+    image=cv2.imread(imgPath,0)
+    image=image.astype("float64")
+    # Initialize the PSF and deblurred image
+    psf = np.ones(psf_size) / np.prod(psf_size)
+    deblurred_image = image.copy()
 
-# def Richardson_Lucy(imgPath, iterations, kernel_size):
+    for _ in range(num_iterations):
+        # Estimate the blurred image using the current PSF
+        blurred_estimate = convolve2d(deblurred_image, psf, 'same', 'symm')
+
+        # Compute the error between the original image and the blurred estimate
+        error = image / (blurred_estimate + 1e-10)
+
+        # Update the deblurred image
+        deblurred_image *= convolve2d(error, psf[::-1, ::-1], 'same', 'symm')
+
+        # Update the PSF
+        psf_update = convolve2d(image / (convolve2d(deblurred_image, psf, 'same', 'symm') + 1e-10),
+                                deblurred_image[::-1, ::-1], 'full', 'symm')
+        psf_update = psf_update[:psf_size[0], :psf_size[1]]
+        psf += psf_update
+
+        # Normalize the PSF to ensure it sums to 1
+        psf /= np.sum(psf)
+
+    return deblurred_image, psf
 
 def Automated_Crack_Fixing(imgPath, minEdgeRange, maxEdgeRange, minDesiredLineLength,maxDesiredLineLength,maxLineGap, KernelSize,KernelSize2):
-    o_image=cv2.imraed(imgPath)
+    o_image=cv2.imread(imgPath)
     image = cv2.cvtColor(o_image, cv2.COLOR_BGR2GRAY)
     image = image.astype("uint8")
     edges = cv2.Canny(image, minEdgeRange, maxEdgeRange)
@@ -83,7 +107,6 @@ def Automated_Crack_Fixing(imgPath, minEdgeRange, maxEdgeRange, minDesiredLineLe
     # Dilate the edges using a kernel (adjust the kernel size as needed)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (KernelSize, KernelSize))
     dilated_edges = cv2.dilate(edges, kernel)
-    # cv2_imshow(dilated_edges)
 
     # Detect lines using HoughLinesP
     lines = cv2.HoughLinesP(dilated_edges, 1, np.pi/180, threshold=50, minLineLength=minDesiredLineLength, maxLineGap=maxLineGap)
@@ -104,19 +127,24 @@ def Automated_Crack_Fixing(imgPath, minEdgeRange, maxEdgeRange, minDesiredLineLe
         cv2.line(output_image, (x1, y1), (x2, y2), (0, 0, 255), 2)
         cv2.line(mask, (x1, y1), (x2, y2), 255, 2)
 
-      # cv2_imshow(output_image)
+      cv2.imshow("Mask",output_image)
 
       mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
       _, mask = cv2.threshold(mask, 1, 255, cv2.THRESH_BINARY)
 
       kernel2 = cv2.getStructuringElement(cv2.MORPH_RECT, (KernelSize2, KernelSize2))
       mask = cv2.dilate(mask, kernel2)
-      # cv2_imshow(mask)
+    
       inpainting_method = cv2.INPAINT_TELEA  # Use the correct flag
       inpainted_image = cv2.inpaint(image, mask, inpainting_method, flags=cv2.INPAINT_TELEA)
 
-    #   cv2_imshow(inpainted_image)
       return inpainted_image
     else:
         print("Sorry, No lines detected")
 
+def Sharpen(imgPath, sharpening_factor):
+    image = cv2.imread(imgPath)
+    laplacian = cv2.Laplacian(image, cv2.CV_64F)
+    sharpened = image- sharpening_factor * laplacian
+    sharpened = np.uint8(sharpened)
+    return sharpened
