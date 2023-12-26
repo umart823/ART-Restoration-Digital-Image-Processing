@@ -359,7 +359,9 @@ class Ui_MainWindow(object):
         
     def ContrastStretchClicked(self):
         if(input_image!=""):
-            self.show3AlgorithmBtns("GHS Algorithm","BJEH Algorithm","FFSU Algorithm")
+            global selectedOption
+            selectedOption="contrastStretch"
+            self.show1AlgorithmBtn("Manual Stretch")
 
     def DeblurClicked(self):
         global selectedOption
@@ -418,6 +420,9 @@ class Ui_MainWindow(object):
         if(selectedOption=="sharpen"):
             selectedAlgorithm="Sharpen"
             self.showDialog({"slider1":{"label":"Sharpening Factor","default":3,"min":0,"max":100,"increment":1}})
+        if(selectedOption=="contrastStretch"):
+            selectedAlgorithm="manualStretch"
+            self.showDialog({"slider1":{"label":"Min Pixel Value","default":0,"min":0,"max":255,"increment":1},"slider2":{"label":"Max Pixel Value","default":255,"min":0,"max":255,"increment":1}})
 
     def AlgorithmBtn2Clicked(self):
         global selectedAlgorithm
@@ -468,6 +473,9 @@ class Ui_MainWindow(object):
             self.saveImage(output_image)
         if(selectedAlgorithm=="Sharpen"):
             output_image=Algorithms.Sharpen(input_image,sliderValues[0]/10)
+            self.saveImage(output_image)
+        if(selectedAlgorithm=="manualStretch"):
+            output_image=Algorithms.Contrast_stretch(input_image,sliderValues[0],sliderValues[1])
             self.saveImage(output_image)
         
     def showDialog(self, sliderInfo):

@@ -149,7 +149,7 @@ def Sharpen(imgPath, sharpening_factor):
     sharpened = np.uint8(sharpened)
     return sharpened
 
-def contrast_stretching(imgPath, min_val, max_val):
+def Contrast_stretch(imgPath, min_val, max_val):
     image = cv2.imread(imgPath)
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     stretched_image = np.clip((gray_image - min_val) / (max_val - min_val) * 255, 0, 255).astype(np.uint8)
