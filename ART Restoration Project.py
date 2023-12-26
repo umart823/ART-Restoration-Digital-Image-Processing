@@ -246,7 +246,7 @@ class Ui_MainWindow(object):
         self.fixCracksBtn.setText(_translate("MainWindow", "Fix Cracks"))
         self.colorizeBtn.setText(_translate("MainWindow", "Colorize"))
         self.denoiseBtn.setText(_translate("MainWindow", "Denoise"))
-        self.topicLabel.setText(_translate("MainWindow", "ART Restrotion"))
+        self.topicLabel.setText(_translate("MainWindow", "ART Restoration"))
         self.noImageSelectedLabel.setText(_translate("MainWindow", "No image selected. Select any image from file menu."))
         self.applyBtnCentered.setText(_translate("MainWindow", "Apply"))
         self.colorCorrectionBtn.setText(_translate("MainWindow", "Color Correction"))
