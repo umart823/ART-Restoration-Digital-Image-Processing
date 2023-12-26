@@ -409,7 +409,7 @@ class Ui_MainWindow(object):
         global selectedAlgorithm
         if(selectedOption=="denoise"):
             selectedAlgorithm="FastNlMeans"
-            self.showDialog({"slider1":{"label":"\'h\' Filter Strength","default":5,"min":5,"max":30,"increment":1},"slider2":{"label":"Template Win. Size","default":7,"min":1,"max":21,"increment":2},"slider3":{"label":"Search Win. Size","default":21,"min":21,"max":50,"increment":1}})
+            self.showDialog({"slider1":{"label":"Filter Strength","default":5,"min":5,"max":30,"increment":1},"slider2":{"label":"Template Win. Size","default":7,"min":1,"max":21,"increment":2},"slider3":{"label":"Search Win. Size","default":21,"min":21,"max":50,"increment":1}})
         if(selectedOption=="histogramEqualization"):
             selectedAlgorithm="CLAHE"
             self.showDialog({"slider1":{"label":"Clip Limit","default":5,"min":1,"max":80,"increment":1}})
