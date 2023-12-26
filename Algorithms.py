@@ -155,3 +155,4 @@ def Contrast_stretch(imgPath, min_val, max_val):
     stretched_image = np.clip((gray_image - min_val) / (max_val - min_val) * 255, 0, 255).astype(np.uint8)
     stretched_color_image = cv2.cvtColor(stretched_image, cv2.COLOR_GRAY2BGR)
     return stretched_color_image
+
