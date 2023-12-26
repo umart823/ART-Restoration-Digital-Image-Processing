@@ -127,23 +127,27 @@ class Ui_Dialog(object):
         self.slider6.valueChanged.connect(lambda value: self.updateSliderLabel(self.slider6,self.slider6Value, value))
         self.slider7.valueChanged.connect(lambda value: self.updateSliderLabel(self.slider7,self.slider7Value, value))
 
-        if(sliders==1):
-            self.slider1.setGeometry(QtCore.QRect(90, 60, 22, 160))
-            self.slider1Value.setGeometry(QtCore.QRect(80, 30, 41, 20))
-            self.slider1Label.setGeometry(QtCore.QRect(50, 240, 101, 16))
-            for i in range(2, 8):
-                getattr(self, f"slider{i}").setVisible(False)
-                getattr(self, f"slider{i}Label").setVisible(False)
-                getattr(self, f"slider{i}Value").setVisible(False)
+        # if(sliders==1):
+        #     self.slider1.setGeometry(QtCore.QRect(90, 60, 22, 160))
+        #     self.slider1Value.setGeometry(QtCore.QRect(80, 30, 41, 20))
+        #     self.slider1Label.setGeometry(QtCore.QRect(50, 240, 101, 16))
+        #     for i in range(2, 8):
+        #         getattr(self, f"slider{i}").setVisible(False)
+        #         getattr(self, f"slider{i}Label").setVisible(False)
+        #         getattr(self, f"slider{i}Value").setVisible(False)
 
-        if(sliders==2):
-            for i in range(3, 8):
-                getattr(self, f"slider{i}").setVisible(False)
-                getattr(self, f"slider{i}Label").setVisible(False)
-                getattr(self, f"slider{i}Value").setVisible(False)
+        # if(sliders==2):
+        #     for i in range(3, 8):
+        #         getattr(self, f"slider{i}").setVisible(False)
+        #         getattr(self, f"slider{i}Label").setVisible(False)
+        #         getattr(self, f"slider{i}Value").setVisible(False)
 
-        if(sliders==3):
-            for i in range(4, 8):
+        # if(sliders==3):
+        #     for i in range(4, 8):
+        #         getattr(self, f"slider{i}").setVisible(False)
+        #         getattr(self, f"slider{i}Label").setVisible(False)
+        #         getattr(self, f"slider{i}Value").setVisible(False)
+        for i in range(sliders+1, 8):
                 getattr(self, f"slider{i}").setVisible(False)
                 getattr(self, f"slider{i}Label").setVisible(False)
                 getattr(self, f"slider{i}Value").setVisible(False)
