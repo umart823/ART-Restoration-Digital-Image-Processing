@@ -182,6 +182,15 @@ class Ui_MainWindow(object):
         self.colorCorrectionBtn.setFont(font)
         self.colorCorrectionBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.colorCorrectionBtn.setObjectName("colorCorrectionBtn")
+
+        self.superResolutionBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.superResolutionBtn.setGeometry(QtCore.QRect(30, 590, 151, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.superResolutionBtn.setFont(font)
+        self.superResolutionBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.superResolutionBtn.setObjectName("superResolutionBtn")
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1355, 21))
@@ -218,6 +227,7 @@ class Ui_MainWindow(object):
         self.colorizeBtn.clicked.connect(self.ColorizeClicked)
         self.denoiseBtn.clicked.connect(self.DenoiseClicked)
         self.colorCorrectionBtn.clicked.connect(self.ColorCorrectionClicked)
+        self.superResolutionBtn.clicked.connect(self.superResolutionClicked)
         self.algorithmBtn1.clicked.connect(self.AlgorithmBtn1Clicked)
         self.algorithmBtn2.clicked.connect(self.AlgorithmBtn2Clicked)
         self.algorithmBtn3.clicked.connect(self.AlgorithmBtn3Clicked)
@@ -246,6 +256,7 @@ class Ui_MainWindow(object):
         self.fixCracksBtn.setText(_translate("MainWindow", "Fix Cracks"))
         self.colorizeBtn.setText(_translate("MainWindow", "Colorize"))
         self.denoiseBtn.setText(_translate("MainWindow", "Denoise"))
+        self.superResolutionBtn.setText(_translate("MainWindow", "Super Resolution"))
         self.topicLabel.setText(_translate("MainWindow", "Image Restoration"))
         self.noImageSelectedLabel.setText(_translate("MainWindow", "No image selected. Select any image from file menu."))
         self.applyBtnCentered.setText(_translate("MainWindow", "Apply"))
@@ -303,6 +314,7 @@ class Ui_MainWindow(object):
         self.colorizeBtn.setVisible(False)
         self.denoiseBtn.setVisible(False)
         self.colorCorrectionBtn.setVisible(False)
+        self.superResolutionBtn.setVisible(False)
         self.algorithmBtn1.setVisible(False)
         self.algorithmBtn2.setVisible(False)
         self.algorithmBtn3.setVisible(False)
@@ -319,6 +331,7 @@ class Ui_MainWindow(object):
         self.colorizeBtn.setVisible(True)
         self.denoiseBtn.setVisible(True)
         self.colorCorrectionBtn.setVisible(True)
+        self.superResolutionBtn.setVisible(True)
         self.algorithmBtn1.setVisible(False)
         self.algorithmBtn2.setVisible(False)
         self.algorithmBtn3.setVisible(False)
@@ -399,6 +412,13 @@ class Ui_MainWindow(object):
         if(input_image!=""):
             selectedOption="denoise"
             self.show3AlgorithmBtns("FastNlMeans","Bm3D","Median Blur")
+
+    def superResolutionClicked(self):
+        global selectedOption
+        if(input_image!=""):
+            selectedOption="superResolution"
+            self.applyBtnCentered.setVisible(True)
+            self.applyBtnCentered.setText("Apply")
 
     def BackBtnClicked(self):
         self.hideAllButtons()
