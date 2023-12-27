@@ -470,6 +470,10 @@ class Ui_MainWindow(object):
             self.outputImage.setText("Please wait\nLoading...")
             QtCore.QCoreApplication.processEvents()
             output_image = Algorithms.Colorize(input_image)
+        if(selectedOption=="superResolution"):
+            self.outputImage.setText("Please wait\nLoading...")
+            QtCore.QCoreApplication.processEvents()
+            output_image = Algorithms.SR_model(input_image)
         self.saveImage(output_image)
         self.actionSave_Image.setEnabled(True)
         self.applyBtnCentered.setVisible(False)
