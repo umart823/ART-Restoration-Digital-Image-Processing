@@ -156,15 +156,30 @@ def Contrast_stretch(imgPath, min_val, max_val):
     stretched_color_image = cv2.cvtColor(stretched_image, cv2.COLOR_GRAY2BGR)
     return stretched_color_image
 
-def Color_correction(imgPath, ref_mean, ref_std, user_mean, user_std):
+# def Color_correction(imgPath, ref_mean, ref_std, user_mean, user_std):
+#     image = cv2.imread(imgPath)
+#     image_float32 = image.astype(np.float32)
+
+#     mean_per_channel = np.mean(image_float32, axis=(0, 1))
+#     std_per_channel = np.std(image_float32, axis=(0, 1))
+
+#     corrected_image = (image_float32 - mean_per_channel) * (ref_std / std_per_channel + user_std) + ref_mean + user_mean
+
+#     corrected_image = np.clip(corrected_image, 0, 255).astype(np.uint8)
+
+#     return corrected_image
+
+def Color_correction(imgPath, red_factor=1.0, green_factor=1.0, blue_factor=1.0):
     image = cv2.imread(imgPath)
     image_float32 = image.astype(np.float32)
 
+    # Calculate mean for each color channel
     mean_per_channel = np.mean(image_float32, axis=(0, 1))
-    std_per_channel = np.std(image_float32, axis=(0, 1))
 
-    corrected_image = (image_float32 - mean_per_channel) * (ref_std / std_per_channel + user_std) + ref_mean + user_mean
+    # Perform color correction using linear transformation and sliders
+    corrected_image = (image_float32 - mean_per_channel) * np.array([blue_factor, green_factor, red_factor]) + mean_per_channel
 
+    # Clip values to the valid range [0, 255]
     corrected_image = np.clip(corrected_image, 0, 255).astype(np.uint8)
 
     return corrected_image

@@ -392,7 +392,7 @@ class Ui_MainWindow(object):
         global selectedOption
         if(input_image!=""):
             selectedOption = "colorCorrect"
-            self.show1AlgorithmBtn("Mean Std Correct")
+            self.show1AlgorithmBtn("Enhance Colors")
 
     def DenoiseClicked(self):
         global selectedOption
@@ -426,8 +426,8 @@ class Ui_MainWindow(object):
             selectedAlgorithm="ManualStretch"
             self.showDialog({"slider1":{"label":"Min Pixel Value","default":0,"min":0,"max":255,"increment":1},"slider2":{"label":"Max Pixel Value","default":255,"min":0,"max":255,"increment":1}})
         if(selectedOption=="colorCorrect"):
-            selectedAlgorithm="MeanStdCorrect"
-            self.showDialog({"slider1":{"label":"Ref Mean","default":0,"min":0,"max":255,"increment":1},"slider2":{"label":"Ref Std Dev","default":0,"min":0,"max":255,"increment":1},"slider3":{"label":"User Mean","default":0,"min":0,"max":255,"increment":1},"slider4":{"label":"User Std Dev","default":0,"min":0,"max":255,"increment":1}})
+            selectedAlgorithm="EnhanceColors"
+            self.showDialog({"slider1":{"label":"Red Factor","default":5,"min":5,"max":20,"increment":1},"slider2":{"label":"Green Factor","default":5,"min":5,"max":20,"increment":1},"slider3":{"label":"Blue Factor","default":5,"min":5,"max":20,"increment":1}})
 
     def AlgorithmBtn2Clicked(self):
         global selectedAlgorithm
@@ -482,8 +482,8 @@ class Ui_MainWindow(object):
         if(selectedAlgorithm=="ManualStretch"):
             output_image=Algorithms.Contrast_stretch(input_image,sliderValues[0],sliderValues[1])
             self.saveImage(output_image)
-        if(selectedAlgorithm=="MeanStdCorrect"):
-            output_image=Algorithms.Color_correction(input_image,sliderValues[0],sliderValues[1],sliderValues[2],sliderValues[3])
+        if(selectedAlgorithm=="EnhanceColors"):
+            output_image=Algorithms.Color_correction(input_image,sliderValues[0]/10,sliderValues[1]/10,sliderValues[2]/10)
             self.saveImage(output_image)
         
     def showDialog(self, sliderInfo):
