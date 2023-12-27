@@ -355,7 +355,7 @@ class Ui_MainWindow(object):
         if(input_image!=""):
             global selectedOption
             selectedOption="histogramEqualization"
-            self.show1AlgorithmBtn("CLAHE")
+            self.show1Algorithm2Btns("CLAHE","OpenCV Eqialization")
         
     def ContrastStretchClicked(self):
         if(input_image!=""):
@@ -434,6 +434,9 @@ class Ui_MainWindow(object):
         if(selectedOption=="denoise"):
             selectedAlgorithm="Bm3D"
             self.showDialog({"slider1":{"label":"Sigma PSD","default":1,"min":0,"max":800,"increment":1}})
+        if(selectedOption=="histogramEqualization"):
+            selectedAlgorithm="OpenCVEqialization"
+            self.showDialog({"slider1":{"label":"Alpha (Contrast)","default":10,"min":0,"max":100,"increment":1},"slider2":{"label":"Beta (Brightness)","default":0,"min":10,"max":100,"increment":1}})
 
     def AlgorithmBtn3Clicked(self):
         global selectedAlgorithm
@@ -484,6 +487,9 @@ class Ui_MainWindow(object):
             self.saveImage(output_image)
         if(selectedAlgorithm=="EnhanceColors"):
             output_image=Algorithms.Color_correction(input_image,sliderValues[0]/10,sliderValues[1]/10,sliderValues[2]/10)
+            self.saveImage(output_image)
+        if(selectedAlgorithm=="OpenCVEqialization"):
+            output_image=Algorithms.OpenCV_Histogram_Equalization(input_image,sliderValues[0]/10,sliderValues[1]/10)
             self.saveImage(output_image)
         
     def showDialog(self, sliderInfo):
