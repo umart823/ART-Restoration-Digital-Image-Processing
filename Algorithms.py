@@ -6,6 +6,12 @@ import os
 import numpy as np
 import cv2
 from scipy.signal import convolve2d
+import tensorflow as tf
+import tensorflow_hub as hub
+import cv2
+import requests
+import numpy as np
+import matplotlib.pyplot as plt
 
 def FastNlMeans_Denoising(imgPath,h,templateWindowSize,searchWindowSize):
     image = cv2.imread(imgPath)
@@ -198,7 +204,7 @@ def Color_correction(imgPath, red_factor=1.0, green_factor=1.0, blue_factor=1.0)
 
     return corrected_image
 
-def SR_preprocessing(img):
+def SR_preprocessing(img,image_plot):
 	imageSize = (tf.convert_to_tensor(image_plot.shape[:-1]) // 4) * 4
 	cropped_image = tf.image.crop_to_bounding_box(
 		img, 0, 0, imageSize[0], imageSize[1])
@@ -206,12 +212,15 @@ def SR_preprocessing(img):
 	return tf.expand_dims(preprocessed_image, 0)
 
 def SR_model(imgPath):
-	image = cv2.imread(imgPath)
-	# This is a model of Enhanced Super Resolution GAN Model
-	# The link given here is a model of ESRGAN model
-	esrgn_path = "https://tfhub.dev/captain-pool/esrgan-tf2/1"
-	model = hub.load(esrgn_path)
-	preprocessed_image = SR_preprocessing(image) # Preprocess the LR Image
-	new_image = model(preprocessed_image) # Runs the model
-	# returns the size of the original argument that is given as input
-	return tf.squeeze(new_image) / 255.0
+    image = cv2.imread(imgPath)
+    image_plot = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # This is a model of Enhanced Super Resolution GAN Model
+    # The link given here is a model of ESRGAN model
+    esrgn_path = "https://tfhub.dev/captain-pool/esrgan-tf2/1"
+    model = hub.load(esrgn_path)
+    preprocessed_image = SR_preprocessing(image,image_plot) # Preprocess the LR Image
+    new_image = model(preprocessed_image) # Runs the model
+    # returns the size of the original argument that is given as input
+    new_image=tf.squeeze(new_image) / 255.0
+    hr_image_np = tf.image.convert_image_dtype(new_image, dtype=tf.uint8).numpy()
+    return hr_image_np

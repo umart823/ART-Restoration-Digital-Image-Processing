@@ -529,8 +529,8 @@ class Ui_MainWindow(object):
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
         _,extension = os.path.splitext(input_image)
-        cv2.imwrite(name +"/temp"+ extension, image)
-        self.showOutput(name +"/temp"+ extension)
+        cv2.imwrite(folder_name +"/temp"+ extension, image)
+        self.showOutput(folder_name +"/temp"+ extension)
         # print(f"Image saved as {name+extension}")
 
     def saveImagePermanent(self):
