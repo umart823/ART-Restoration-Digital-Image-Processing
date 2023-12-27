@@ -151,8 +151,21 @@ def Sharpen(imgPath, sigma=1.5, strength=1.5):
 def Contrast_stretch(imgPath, min_val, max_val):
     image = cv2.imread(imgPath)
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    stretched_image = np.clip((gray_image - min_val) / (max_val - min_val) * 255, 0, 255).astype(np.uint8)
+    
+    stretched_image = (gray_image - min_val) / (max_val - min_val)
+    
+    # Clip values to ensure they are in the range [0, 1]
+    stretched_image = np.clip(stretched_image, 0, 1)
+    
+    # Map values to the range [0, 255] and convert to uint8
+    stretched_image = (stretched_image * 255).astype(np.uint8)
+    
+    # Adjust values for pixels outside the specified range
+    stretched_image[gray_image < min_val] = min_val
+    stretched_image[gray_image > max_val] = max_val
+    
     stretched_color_image = cv2.cvtColor(stretched_image, cv2.COLOR_GRAY2BGR)
+    
     return stretched_color_image
 
 def Color_correction(imgPath, red_factor=1.0, green_factor=1.0, blue_factor=1.0):
