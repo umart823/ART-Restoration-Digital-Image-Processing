@@ -427,7 +427,7 @@ class Ui_MainWindow(object):
             self.showDialog({"slider1":{"label":"Min Pixel Value","default":0,"min":0,"max":255,"increment":1},"slider2":{"label":"Max Pixel Value","default":255,"min":0,"max":255,"increment":1}})
         if(selectedOption=="colorCorrect"):
             selectedAlgorithm="EnhanceColors"
-            self.showDialog({"slider1":{"label":"Red Factor","default":5,"min":5,"max":20,"increment":1},"slider2":{"label":"Green Factor","default":5,"min":5,"max":20,"increment":1},"slider3":{"label":"Blue Factor","default":5,"min":5,"max":20,"increment":1}})
+            self.showDialog({"slider1":{"label":"Red Factor","default":10,"min":5,"max":20,"increment":1},"slider2":{"label":"Green Factor","default":10,"min":5,"max":20,"increment":1},"slider3":{"label":"Blue Factor","default":10,"min":5,"max":20,"increment":1}})
 
     def AlgorithmBtn2Clicked(self):
         global selectedAlgorithm
