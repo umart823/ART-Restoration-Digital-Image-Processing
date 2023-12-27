@@ -355,7 +355,7 @@ class Ui_MainWindow(object):
         if(input_image!=""):
             global selectedOption
             selectedOption="histogramEqualization"
-            self.show1Algorithm2Btns("CLAHE","OpenCV Eqialization")
+            self.show2AlgorithmBtns("CLAHE","OpenCV Eqialization")
         
     def ContrastStretchClicked(self):
         if(input_image!=""):
