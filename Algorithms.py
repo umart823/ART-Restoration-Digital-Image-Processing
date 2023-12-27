@@ -69,6 +69,21 @@ def CLAHE(imgPath,clipLimit=5.0,GridSize=10):
     clahe = cv2.createCLAHE(clipLimit, tileGridSize=(GridSize, GridSize))
     enhanced_image = clahe.apply(gray_image)
     return enhanced_image
+    
+def OpenCV_Histogram_Equalization(imgPath,alpha=1.0, beta=0.0):
+    image = cv2.imread(imgPath, cv2.IMREAD_GRAYSCALE)
+    
+    # Apply histogram equalization
+    equalized_image = cv2.equalizeHist(image)
+    
+    # Apply intensity control (contrast and brightness adjustment)
+    adjusted_image = cv2.convertScaleAbs(equalized_image, alpha=alpha, beta=beta)
+    
+    # Convert to color if the original image is in color
+    if len(image.shape) == 3:
+        adjusted_image = cv2.cvtColor(adjusted_image, cv2.COLOR_GRAY2BGR)
+    
+    return adjusted_image
 
 def Richardson_lucy_blind_deconvolution_psf(imgPath, num_iterations=10, psf_size=(5, 5)):
     image=cv2.imread(imgPath,0)
