@@ -142,7 +142,7 @@ class Ui_MainWindow(object):
         self.denoiseBtn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.denoiseBtn.setObjectName("denoiseBtn")
         self.topicLabel = QtWidgets.QLabel(self.centralwidget)
-        self.topicLabel.setGeometry(QtCore.QRect(540, 10, 271, 71))
+        self.topicLabel.setGeometry(QtCore.QRect(510, 10, 301, 71))
         font = QtGui.QFont()
         font.setPointSize(28)
         font.setBold(False)
@@ -246,7 +246,7 @@ class Ui_MainWindow(object):
         self.fixCracksBtn.setText(_translate("MainWindow", "Fix Cracks"))
         self.colorizeBtn.setText(_translate("MainWindow", "Colorize"))
         self.denoiseBtn.setText(_translate("MainWindow", "Denoise"))
-        self.topicLabel.setText(_translate("MainWindow", "ART Restoration"))
+        self.topicLabel.setText(_translate("MainWindow", "Image Restoration"))
         self.noImageSelectedLabel.setText(_translate("MainWindow", "No image selected. Select any image from file menu."))
         self.applyBtnCentered.setText(_translate("MainWindow", "Apply"))
         self.colorCorrectionBtn.setText(_translate("MainWindow", "Color Correction"))
@@ -501,10 +501,12 @@ class Ui_MainWindow(object):
         dialog.setWindowIcon(icon)
         dialog.exec_()
 
-    def saveImage(self,image, name="Temp/temp"):
+    def saveImage(self,image, folder_name="Temp"):
+        if not os.path.exists(folder_name):
+            os.makedirs(folder_name)
         _,extension = os.path.splitext(input_image)
-        cv2.imwrite(name + extension, image)
-        self.showOutput(name + extension)
+        cv2.imwrite(name +"/temp"+ extension, image)
+        self.showOutput(name +"/temp"+ extension)
         # print(f"Image saved as {name+extension}")
 
     def saveImagePermanent(self):
@@ -542,7 +544,7 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
-    MainWindow.setWindowTitle("Art Restoration")
+    MainWindow.setWindowTitle("Image Restoration")
     icon = QtGui.QIcon("Icons/icon.png")
     MainWindow.setWindowIcon(icon)
     MainWindow.show()
