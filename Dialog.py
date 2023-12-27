@@ -153,7 +153,7 @@ class Ui_Dialog(object):
 
         for value in [self.slider1Value,self.slider2Value,self.slider3Value,self.slider4Value,self.slider5Value,self.slider6Value,self.slider7Value]:
             if(sliderInfo.get(value.objectName()[:-5]) != None):
-                if((sliderInfo["slider1"]["label"]=="Red Factor" and sliderInfo["slider2"]["label"]=="Green Factor" and sliderInfo["slider3"]["label"]=="Blue Factor" and len(sliderInfo)==3) or (sliderInfo["slider1"]["label"]=="Sigma PSD" and len(sliderInfo)==1)):
+                if((sliderInfo["slider1"]["label"]=="Red Factor" and sliderInfo["slider2"]["label"]=="Green Factor" and sliderInfo["slider3"]["label"]=="Blue Factor" and len(sliderInfo)==3) or (sliderInfo["slider1"]["label"]=="Sigma PSD" and len(sliderInfo)==1) or (sliderInfo["slider1"]["label"]=="Sigma" and sliderInfo["slider2"]["label"]=="Strength" and len(sliderInfo)==2)):
                     value.setText(_translate("Dialog", str(sliderInfo[value.objectName()[:-5]]["default"]/10)))
                 else:
                     value.setText(_translate("Dialog", str(sliderInfo[value.objectName()[:-5]]["default"])))
@@ -164,7 +164,7 @@ class Ui_Dialog(object):
     def updateSliderLabel(self, slider, label, value):
         if(sliderInfo.get(slider.objectName())!=None):
             if((slider.value()-sliderInfo[slider.objectName()]["min"])%(sliderInfo[slider.objectName()]["increment"])==0):
-                if((sliderInfo["slider1"]["label"]=="Red Factor" and sliderInfo["slider2"]["label"]=="Green Factor" and sliderInfo["slider3"]["label"]=="Blue Factor" and len(sliderInfo)==3) or (sliderInfo["slider1"]["label"]=="Sigma PSD" and len(sliderInfo)==1)):
+                if((sliderInfo["slider1"]["label"]=="Red Factor" and sliderInfo["slider2"]["label"]=="Green Factor" and sliderInfo["slider3"]["label"]=="Blue Factor" and len(sliderInfo)==3) or (sliderInfo["slider1"]["label"]=="Sigma PSD" and len(sliderInfo)==1) or (sliderInfo["slider1"]["label"]=="Sigma" and sliderInfo["slider2"]["label"]=="Strength" and len(sliderInfo)==2)):
                     label.setText(str(value/10))
                 else:
                     label.setText(str(value))
