@@ -8,10 +8,8 @@ import cv2
 from scipy.signal import convolve2d
 import tensorflow as tf
 import tensorflow_hub as hub
-import cv2
 import requests
-import numpy as np
-import matplotlib.pyplot as plt
+
 
 def FastNlMeans_Denoising(imgPath,h,templateWindowSize,searchWindowSize):
     image = cv2.imread(imgPath)
